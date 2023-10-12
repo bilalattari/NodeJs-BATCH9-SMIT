@@ -1,8 +1,13 @@
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
+const mongoose = require('mongoose');
 
 const userRoutes = require('./routes/user')
+
+mongoose.connect('mongodb+srv://blog:blog@cluster0.hw5owlh.mongodb.net/').then(() => {
+    console.log('Mongodb Connected')
+}).catch((err) => console.log(err))
 
 function middleware(req, res, next) {
     console.log('Middleware console')
