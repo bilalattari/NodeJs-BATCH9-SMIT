@@ -1,29 +1,29 @@
 const app = require("express");
 const router = app.Router();
-const UserModal = require("../Model/user");
+const BlogModal = require("../Model/blog");
 
-// Get All Users
+// Get All Blogs
 router.get("/", async (req, res) => {
-  const users = await UserModal.find();
+  const blogs = await BlogModal.find().populate('user').exec();
   res.status(200).send({
     status: 200,
-    users,
+    blogs,
   });
 });
 
-// Get Single User
+// Get Single Blog
 router.get("/:id", async (req, res) => {
-  const user = await UserModal.findById(req.params.id);
-  if (!user) {
-    res.status(500).send({ status: 500, error: true, msg: "user not found" });
+  const blog = await BlogModal.findById(req.params.id);
+  if (!blog) {
+    res.status(500).send({ status: 500, error: true, msg: "blog not found" });
   }
-  if (user) {
-    res.status(200).send({ status: 200, user });
+  if (blog) {
+    res.status(200).send({ status: 200, blog });
   }
 });
 
-router.get("/findByEmail", async (req, res) => {
-  const user = await UserModal.find({ email: req.query.email });
+router.get("/findByUser", async (req, res) => {
+  const user = await BlogModal.find({ userId: req.query.userId });
   if (!user) {
     res.status(500).send({ status: 500, error: true, msg: "user not found" });
   }
@@ -35,8 +35,8 @@ router.get("/findByEmail", async (req, res) => {
 router.post("/", async (req, res) => {
   console.log(req.body);
   try {
-    const user = await UserModal.create({ ...req.body });
-    res.status(200).send({ status: 200, user });
+    const blog = await BlogModal.create({ ...req.body });
+    res.status(200).send({ status: 200, blog });
   } catch (err) {
     res
       .status(500)
@@ -47,7 +47,7 @@ router.post("/", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   try {
-    await UserModal.findByIdAndDelete(req.params.id);
+    await BlogModal.findByIdAndDelete(req.params.id);
     res.status(200).send({ status: 200, msg: "User deleted" });
   } catch (err) {
     res
@@ -60,17 +60,17 @@ router.delete("/:id", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   try {
-    const user = await UserModal.findByIdAndUpdate(
+    const blog = await BlogModal.findByIdAndUpdate(
       req.params.id,
       {
         ...req.body,
       },
       { new: true }
     );
-    if (!user) {
-      res.status(401).send({ status: 401, msg: "User Not Found" });
+    if (!blog) {
+      res.status(401).send({ status: 401, msg: "blog Not Found" });
     } else {
-      res.status(200).send({ status: 200, user, msg: "User Updated" });
+      res.status(200).send({ status: 200, blog, msg: "blog Updated" });
     }
   } catch (err) {
     res

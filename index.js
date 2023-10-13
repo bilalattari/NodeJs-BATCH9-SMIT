@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 
 const userRoutes = require('./routes/user')
+const blogRoutes = require('./routes/blog')
 
 mongoose.connect('mongodb+srv://blog:blog@cluster0.hw5owlh.mongodb.net/').then(() => {
     console.log('Mongodb Connected')
@@ -33,6 +34,7 @@ app.get('/about', (req, res) => {
 
 
 app.use('/user', userRoutes)
+app.use('/blog', blogRoutes)
 
 // app.get('/user/:id', (req, res) => {
 //     console.log('console.log-->', req.params.id)
