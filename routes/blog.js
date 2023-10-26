@@ -1,9 +1,9 @@
 const app = require("express");
 const router = app.Router();
 const BlogModal = require("../Model/blog");
-
+const authenticateJwt = require('../helpers/authenticateJwt')
 // Get All Blogs
-router.get("/", async (req, res) => {
+router.get("/", authenticateJwt , async (req, res) => {
   const blogs = await BlogModal.find().populate('user').exec();
   res.status(200).send({
     status: 200,
@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
 
 // Get Single Blog
 router.get("/:id", async (req, res) => {
-  const blog = await BlogModal.findById(req.params.id);
+  const blog = await BlogModal.findById(req.params.id).populate('user').exec();
   if (!blog) {
     res.status(500).send({ status: 500, error: true, msg: "blog not found" });
   }
@@ -23,7 +23,7 @@ router.get("/:id", async (req, res) => {
 });
 
 router.get("/findByUser", async (req, res) => {
-  const user = await BlogModal.find({ userId: req.query.userId });
+  const user = await BlogModal.find({ userId: req.query.userId }).populate('user').exec();
   if (!user) {
     res.status(500).send({ status: 500, error: true, msg: "user not found" });
   }
@@ -79,4 +79,4 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = router; 

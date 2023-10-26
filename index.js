@@ -34,16 +34,7 @@ app.get('/about', (req, res) => {
 
 
 app.use('/user', userRoutes)
-app.use('/blog', blogRoutes)
-
-// app.get('/user/:id', (req, res) => {
-//     console.log('console.log-->', req.params.id)
-//     console.log('console.log-->', req.query)
-//     res.send({ 
-//         status: 200,
-//         msg: "User id is " + req.params.id
-//     })
-// })
+app.use('/blogs', blogRoutes)
 
 const port = 3000
 
